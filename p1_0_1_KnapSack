@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>  // for setw
+
+using namespace std;
+
+int main() {
+    int itemcount, capacity;
+    cout << "Enter number of elements: ";
+    cin >> itemcount;
+
+    vector<int> weights(itemcount);
+    vector<int> values(itemcount);
+
+    cout << "Enter capacity: ";
+    cin >> capacity;
+
+    cout << "Enter weight and value of each element:" << endl;
+    for (int i = 0; i < itemcount; i++) {
+        cout << "Enter weight of element " << i + 1 << ": ";
+        cin >> weights[i];
+        cout << "Enter value of element " << i + 1 << ": ";
+        cin >> values[i];
+    }
+
+    vector<vector<int>> dp(itemcount + 1, vector<int>(capacity + 1, 0));
+
+    for (int i = 1; i <= itemcount; i++) {
+        for (int w = 0; w <= capacity; w++) {
+            if (weights[i - 1] <= w) {
+                dp[i][w] = max(dp[i - 1][w], values[i - 1] + dp[i - 1][w - weights[i - 1]]);
+            } else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    cout << "Maximum value achievable: " << dp[itemcount][capacity] << endl;
+
+    // Print the dp matrix as a table
+    cout << "\nDP Matrix (rows: items, columns: capacities):\n";
+    cout << "     ";
+    for (int w = 0; w <= capacity; w++) {
+        cout << setw(4) << w;
+    }
+    cout << endl;
+
+    for (int i = 0; i <= itemcount; i++) {
+        cout << setw(3) << i << " |";
+        for (int w = 0; w <= capacity; w++) {
+            cout << setw(4) << dp[i][w];
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
