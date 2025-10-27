@@ -1,73 +1,49 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-struct arr{ double value; double weight; double ratio;};
+struct arr{
+    double weight;
+    double value;
+    double ratio;
+};
 
-
-int main()
-{
+int main(){
     double profit=0;
-    cout<<"Enter maximum capacity of Knapsack:";
     double capacity;
+    
+    cout<<"Enter the maximum capacity of knapsack: ";
     cin>>capacity;
-    cout<<"Enter total number of items:";
+    cout<<"Enter the total number of items: ";
     int n;
     cin>>n;
     arr a[n];
-    for(int j=0;j<n;j++)
-    {
-       cout<<"Enter the value of the item "<<j<<":";
-       cin>> a[j].value;
-       cout<<"ENTER WEIGHT OF ITEM "<<j<<":";
-       cin>> a[j].weight;
-       a[j].ratio= (a[j].value)/(a[j].weight);
+    
+    for(int i=0;i<n;i++){
+        cout<<"Enter the value of item "<<i+1<<":";
+        cin>>a[i].value;
+        cout<<"Enter the weight of item "<<i+1<<":";
+        cin>>a[i].weight;
+        a[i].ratio=(a[i].value/a[i].weight);
+        
     }
     
-    for(int i=0;i<n;i++)
-    {
-      for(int j=0;j<n;j++)
-      {
-      
-	      if(a[j].ratio < a[j+1].ratio )
-	      {
-		 double temp_ratio;
-		 temp_ratio=a[j].ratio;
-		 a[j].ratio=a[j+1].ratio;
-		 a[j+1].ratio=temp_ratio;
-		 
-		 double temp_val;
-		 temp_val=a[j].value;
-		 a[j].value=a[j+1].value;
-		 a[j+1].value=temp_val;
-		 
-		 double temp_weight;
-		 temp_weight=a[j].weight;
-		 a[j].weight=a[j+1].weight;
-		 a[j+1].weight=temp_weight;
-	       }
-	}
-     }
-     
-     for(int i=0;i<n;i++)
-     {
-        if(a[i].weight<capacity)
-        {
-           capacity=capacity- a[i].weight;
-           profit=profit+ a[i].value;
+    for(int i=0;i<n-1;i++){
+        for(int j=0;j<n-1-i;j++){
+            if(a[j].ratio<a[j+1].ratio){
+                swap(a[j],a[j+1]);
+            }
         }
-        else
-        {
-           profit=profit+((capacity/(a[i].weight))*(a[i].value));
+    }
+    
+    for(int i=0;i<n;i++){
+        if(a[i].weight<=capacity){
+            capacity-=a[i].weight;
+            profit+=a[i].value;
         }
-     }
-     
-     cout<<"The Maximum profit is:"<< profit;
-  };
-        
-     
-     
-
-
-
-
-         
+        else{
+            profit+=(capacity/a[i].weight)*a[i].value;
+        }
+    }
+    
+    cout<<"MAX PROFIT: "<<profit;
+    }
